@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Authentication Setup - Step 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a0033 0%, #2d1b4e 50%, #0f0f23 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #a855f7;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #c4b5fd;
+        }
+
+        .step-container {
+            background: rgba(30, 30, 60, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .step-title {
+            font-size: 1.8rem;
+            color: #a855f7;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .substep {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .substep-title {
+            font-size: 1.3rem;
+            color: #c4b5fd;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .substep-content {
+            color: #e0e0e0;
+            margin-bottom: 15px;
+        }
+
+        .substep-content ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .substep-content li {
+            margin-bottom: 8px;
+            color: #d1d5db;
+        }
+
+        .code-block {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            color: #10b981;
+            overflow-x: auto;
+        }
+
+        .tip-box {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid #8b5cf6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .tip-box h4 {
+            color: #a855f7;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .warning-box h4 {
+            color: #f87171;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .highlight {
+            color: #a855f7;
+            font-weight: 600;
+        }
+
+        .checkmark {
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .video-container {
+            background: rgba(30, 30, 60, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .video-container h3 {
+            color: #a855f7;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            margin: 20px 0;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .next-button {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .step-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Firebase Authentication Setup</h1>
+            <p>Step 2: Set Up Google Sign-In & Domain Configuration</p>
+        </div>
+
+        <div class="step-container">
+            <h2 class="step-title">
+                <span class="step-number">1</span>
+                Go to Authentication
+            </h2>
+            <div class="substep">
+                <div class="substep-content">
+                    <p>In your Firebase Console, navigate to the Authentication section:</p>
+                    <ul>
+                        <li>Click <span class="highlight">Build → Authentication</span> in the left sidebar</li>
+                        <li>Click the <span class="highlight">"Get started"</span> button if you haven't done so already</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-container">
+            <h2 class="step-title">
+                <span class="step-number">2</span>
+                Enable Google Sign-In
+            </h2>
+            <div class="substep">
+                <div class="substep-content">
+                    <p>Configure Google as a sign-in provider:</p>
+                    <ul>
+                        <li>Click the <span class="highlight">Sign-in method</span> tab at the top</li>
+                        <li>Find <span class="highlight">Google</span> in the list of providers</li>
+                        <li>Click on <span class="highlight">Google</span> → a configuration page will open</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-container">
+            <h2 class="step-title">
+                <span class="step-number">3</span>
+                Configure Google Sign-In
+            </h2>
+            <div class="substep">
+                <div class="substep-content">
+                    <p>Fill in the required configuration fields:</p>
+                    <ul>
+                        <li><span class="highlight">Project support email:</span> Pick your Google Account email — Firebase uses this for OAuth consent</li>
+                        <li><span class="highlight">Public-facing name:</span> By default, it's your Firebase project's name. You can edit it if you want</li>
+                        <li><span class="highlight">Authorized domains:</span> This part is very important — Firebase needs to know which website domains are allowed to use Google Sign-In</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-container">
+            <h2 class="step-title">
+                <span class="step-number">4</span>
+                Add Authorized Domains
+            </h2>
+            <div class="substep">
+                <div class="substep-content">
+                    <p>Under <span class="highlight">Authorized domains</span>, you'll see the default domains:</p>
+                    <div class="code-block">Project domains:
+- your-project-id.firebaseapp.com
+- localhost</div>
+                    <p>These are there by default and allow you to test locally.</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <h4><span class="checkmark">✅</span> For Local Development:</h4>
+                <p>You can test Google Sign-In on <code>localhost</code> right away — no extra domain is needed.</p>
+            </div>
+
+            <div class="tip-box">
+                <h4><span class="checkmark">✅</span> For Custom Domain Deployment:</h4>
+                <p>If you're deploying your site on a custom domain (e.g., <code>www.myawesomeapp.com</code>):</p>
+                <ul>
+                    <li>Click <span class="highlight">Add domain</span></li>
+                    <li>Enter <code>www.myawesomeapp.com</code></li>
+                    <li>Click <span class="highlight">Add</span></li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h4>🔹 Important Tips:</h4>
+                <ul>
+                    <li>Only add the domain — no <code>https://</code> or <code>/</code> path</li>
+                    <li>If you use subdomains, add each one if needed (like <code>app.myawesomeapp.com</code>)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step-container">
+            <h2 class="step-title">
+                <span class="step-number">5</span>
+                Save Changes
+            </h2>
+            <div class="substep">
+                <div class="substep-content">
+                    <p>When done configuring all settings:</p>
+                    <ul>
+                        <li>Scroll down to the bottom of the page</li>
+                        <li>Click <span class="highlight">Save</span> to enable Google as a sign-in provider</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-container">
+            <h2 class="step-title">
+                <span class="step-number">6</span>
+                How it Works
+            </h2>
+            <div class="substep">
+                <div class="substep-content">
+                    <p>When your frontend calls Firebase's <span class="highlight">Google Auth Provider</span>, the sign-in popup will only work on:</p>
+                    <ul>
+                        <li><code>localhost</code> (for development)</li>
+                        <li><code>your-project-id.firebaseapp.com</code> (Firebase Hosting)</li>
+                        <li>Any custom domains you added</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ Important Note:</h4>
+                <p>If you don't add your domain, the sign-in popup will fail with an <span class="highlight">"unauthorized domain" error</span>.</p>
+            </div>
+        </div>
+
+        <div class="video-container">
+            <h3>📺 Video Demo: Firebase Authentication Setup</h3>
+            <p>Watch this comprehensive guide to see the process in action:</p>
+            <div class="video-wrapper">
+                <iframe 
+                    src="https://www.youtube.com/embed/rbuSx1yEgV8" 
+                    title="Firebase Authentication Tutorial" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="#" class="next-button" id="nextButton">
+                Continue to Next Step →
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Get project ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentProjectId = urlParams.get('projectId');
+        
+        // Set up the next button to redirect with project ID
+        document.getElementById('nextButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (currentProjectId) {
+                window.location.href = `onboard3.html?projectId=${currentProjectId}`;
+            } else {
+                // If no project ID, still navigate but show a warning
+                console.warn('No project ID found in URL parameters');
+                window.location.href = 'onboard3.html';
+            }
+        });
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const stepContainers = document.querySelectorAll('.step-container');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            stepContainers.forEach(container => {
+                container.style.opacity = '0';
+                container.style.transform = 'translateY(20px)';
+                container.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(container);
+            });
+        });
+
+        // Add hover effects for better interactivity
+        document.querySelectorAll('.substep').forEach(substep => {
+            substep.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateX(5px)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            
+            substep.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateX(0)';
+            });
+        });
+    </script>
+</body>
+</html>

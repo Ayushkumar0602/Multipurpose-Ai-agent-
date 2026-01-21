@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Setup Guide - Complete Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #9d4edd, #c77dff, #e0aaff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                filter: drop-shadow(0 0 10px #9d4edd);
+            }
+            to {
+                filter: drop-shadow(0 0 20px #c77dff);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #b19cd9;
+            margin-bottom: 30px;
+        }
+
+        .video-section {
+            background: rgba(157, 78, 221, 0.1);
+            border: 1px solid #9d4edd;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .video-section h2 {
+            color: #c77dff;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            margin-bottom: 20px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            border: 2px solid #9d4edd;
+        }
+
+        .guide-content {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+            backdrop-filter: blur(5px);
+        }
+
+        .step {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: rgba(157, 78, 221, 0.05);
+            border-left: 4px solid #9d4edd;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .step h3 {
+            color: #c77dff;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .step-number {
+            background: linear-gradient(45deg, #9d4edd, #c77dff);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .step p {
+            margin-bottom: 15px;
+            color: #d0d0d0;
+        }
+
+        .step ol, .step ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .step li {
+            margin-bottom: 8px;
+            color: #c0c0c0;
+        }
+
+        .code-block {
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            color: #00ff88;
+            overflow-x: auto;
+        }
+
+        .folder-structure {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            color: #7c3aed;
+        }
+
+        .success-indicator {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            color: #fff3cd;
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin: 40px 0;
+            padding: 30px;
+        }
+
+        .continue-btn {
+            background: linear-gradient(45deg, #9d4edd, #c77dff);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.3);
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(157, 78, 221, 0.5);
+            background: linear-gradient(45deg, #c77dff, #e0aaff);
+        }
+
+        .next-steps {
+            background: rgba(157, 78, 221, 0.1);
+            border: 1px solid #9d4edd;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .next-steps h3 {
+            color: #c77dff;
+            margin-bottom: 20px;
+        }
+
+        .next-steps ul {
+            list-style: none;
+        }
+
+        .next-steps li {
+            padding: 10px 0;
+            color: #b19cd9;
+        }
+
+        .next-steps li::before {
+            content: "🚀";
+            margin-right: 10px;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            .container {
+                padding: 10px;
+            }
+            .step {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 Firebase Setup Guide</h1>
+            <p class="subtitle">Complete Step-by-Step Tutorial: Node.js → VS Code → Firebase CLI → Functions & Hosting</p>
+        </div>
+
+        <div class="video-section">
+            <h2>📹 Video Tutorial</h2>
+            <div class="video-container">
+                <iframe 
+                    src="https://www.youtube.com/embed/4d-gIPGzmK4" 
+                    title="Firebase Setup Tutorial" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <p style="color: #b19cd9; font-style: italic;">Watch this comprehensive video walkthrough while following the written guide below!</p>
+        </div>
+
+        <div class="guide-content">
+            <div class="step">
+                <h3><span class="step-number">1</span>Install Node.js</h3>
+                <p><span class="emoji">💡</span>Node.js lets you run JavaScript outside the browser. Firebase CLI depends on it.</p>
+                <ol>
+                    <li>Go to the official download page: <strong>https://nodejs.org/en/download</strong></li>
+                    <li>Click the big green <strong>LTS</strong> button — "Recommended For Most Users"</li>
+                    <li>Download the installer for your OS (Windows / macOS / Linux)</li>
+                    <li>Run the installer:
+                        <ul>
+                            <li>Click <strong>Next</strong> → keep all defaults</li>
+                            <li>Click <strong>Install</strong></li>
+                            <li>Click <strong>Finish</strong> when done</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">2</span>Create a Project Folder</h3>
+                <p><span class="emoji">📁</span>This is the folder where you'll keep all your Firebase code.</p>
+                <ol>
+                    <li>Open <strong>File Explorer</strong> (Windows) or <strong>Finder</strong> (Mac)</li>
+                    <li>Pick a location like <strong>Documents</strong> or <strong>Desktop</strong></li>
+                    <li>Create a new folder: Example name: <code>firebase-project</code></li>
+                </ol>
+                <div class="folder-structure">
+Documents/<br>
+&nbsp;&nbsp;├─ firebase-project/
+                </div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">3</span>Open Project in VS Code</h3>
+                <ol>
+                    <li>Open <strong>Visual Studio Code</strong></li>
+                    <li>Click <strong>File > Open Folder...</strong></li>
+                    <li>Select your <code>firebase-project</code> folder</li>
+                </ol>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">4</span>Open Terminal in VS Code</h3>
+                <ol>
+                    <li>In VS Code, open Terminal:
+                        <ul>
+                            <li><strong>Menu:</strong> Terminal > New Terminal</li>
+                            <li>Or use shortcut: <strong>Ctrl + `</strong> (backtick) on Windows, <strong>Cmd + `</strong> on Mac</li>
+                        </ul>
+                    </li>
+                    <li>The terminal will open at the bottom</li>
+                </ol>
+                <div class="code-block success-indicator">your-username firebase-project $</div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">5</span>Check Node.js Installed Correctly</h3>
+                <p>In the VS Code terminal, type:</p>
+                <div class="code-block">node -v<br>npm -v</div>
+                <p><span class="success-indicator">✅ You should see version numbers like:</span></p>
+                <div class="code-block success-indicator">v20.11.1<br>10.2.4</div>
+                <div class="warning">If you see errors → reinstall Node.js!</div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">6</span>Install Firebase CLI</h3>
+                <p>The Firebase CLI lets you talk to Firebase from your computer.</p>
+                <p>In the terminal, run:</p>
+                <div class="code-block">npm install -g firebase-tools</div>
+                <p><span class="emoji">📝</span><code>-g</code> means <strong>global install</strong> → usable anywhere.</p>
+                <p>When done, check it worked:</p>
+                <div class="code-block">firebase --version</div>
+                <p><span class="success-indicator">You'll see something like: 12.6.0</span></p>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">7</span>Login to Firebase</h3>
+                <p>In the terminal, run:</p>
+                <div class="code-block">firebase login</div>
+                <ol>
+                    <li>Your browser will open → choose your Google account</li>
+                    <li>Click <strong>Allow</strong> to let Firebase CLI access your Firebase projects</li>
+                </ol>
+                <p><span class="success-indicator">✅ Back in the terminal, you'll see:</span></p>
+                <div class="code-block success-indicator">✔  Success! Logged in as yourname@gmail.com</div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">8</span>Initialize Firebase Functions & Hosting</h3>
+                <p>In the terminal, run:</p>
+                <div class="code-block">firebase init</div>
+                <p>This launches a setup wizard.</p>
+                
+                <h4 style="color: #c77dff; margin: 20px 0 10px 0;">👉 Prompt 1: Which features?</h4>
+                <ul>
+                    <li>Use arrow keys → spacebar to select:</li>
+                    <li>✅ Functions: Configure Cloud Functions</li>
+                    <li>✅ Hosting: Configure files for Firebase Hosting</li>
+                    <li>Press Enter</li>
+                </ul>
+
+                <h4 style="color: #c77dff; margin: 20px 0 10px 0;">👉 Prompt 2: Associate project</h4>
+                <ul>
+                    <li>Select <strong>Use an existing project</strong></li>
+                    <li>Arrow keys → select your Firebase project</li>
+                    <li>Press Enter</li>
+                </ul>
+
+                <h4 style="color: #c77dff; margin: 20px 0 10px 0;">👉 Prompt 3: Functions setup</h4>
+                <ul>
+                    <li>✔️ JavaScript → <strong>(select JavaScript)</strong> <em>(or TypeScript if you know it)</em></li>
+                    <li>✔️ ESLint? → <strong>Y</strong> (helps catch errors)</li>
+                    <li>✔️ Install dependencies now? → <strong>Y</strong></li>
+                </ul>
+
+                <h4 style="color: #c77dff; margin: 20px 0 10px 0;">👉 Prompt 4: Hosting setup</h4>
+                <ul>
+                    <li>✔️ What's your public directory? → <code>.</code> (default)</li>
+                    <li>✔️ Configure as single-page app? → <code>N</code> <em>(unless you're using React/Vue)</em></li>
+                    <li>✔️ Set up automatic builds & deploys with GitHub? → <code>N</code></li>
+                </ul>
+
+                <p><span class="success-indicator">✅ Firebase CLI creates:</span></p>
+                <div class="folder-structure">
+firebase-project/<br>
+&nbsp;&nbsp;├─ functions/<br>
+&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├─ index.js<br>
+&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├─ package.json<br>
+&nbsp;&nbsp;├─ ./<br>
+&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├─ index.html<br>
+&nbsp;&nbsp;├─ firebase.json<br>
+&nbsp;&nbsp;├─ .firebaserc
+                </div>
+                <ul>
+                    <li><code>functions/</code> → your backend code</li>
+                    <li><code>public/</code> → your website files</li>
+                    <li><code>firebase.json</code> → config</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">9</span>Done! <span class="emoji">🎉</span></h3>
+                <p>You have:</p>
+                <ul>
+                    <li><span class="success-indicator">✅ Node.js installed</span></li>
+                    <li><span class="success-indicator">✅ Project folder in VS Code</span></li>
+                    <li><span class="success-indicator">✅ Firebase CLI installed & logged in</span></li>
+                    <li><span class="success-indicator">✅ Cloud Functions & Hosting initialized</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="next-steps">
+            <h3>🎉 Next Steps</h3>
+            <ul>
+                <li>Put your HTML/CSS/JS in <code>/public</code></li>
+                <li>Write your backend code in <code>/functions/index.js</code></li>
+                <li>Test locally: <code>firebase emulators:start</code></li>
+                <li>Deploy live: <code>firebase deploy</code></li>
+            </ul>
+        </div>
+
+        <div class="action-buttons">
+            <button class="continue-btn" onclick="continueToNextStep()">
+                🚀 Continue to Next Step
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Get project ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentProjectId = urlParams.get('projectId');
+
+        function continueToNextStep() {
+            // Redirect to onboard6.html with project ID
+            if (currentProjectId) {
+                window.location.href = `/backend.html?projectId=${currentProjectId}`;
+            } else {
+                // If no project ID, still redirect but without parameters
+                window.location.href = '/overview.html';
+            }
+        }
+
+        // Add smooth scrolling for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const steps = document.querySelectorAll('.step');
+            
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.transform = 'translateX(0)';
+                        entry.target.style.opacity = '1';
+                    }
+                });
+            }, observerOptions);
+
+            steps.forEach((step, index) => {
+                step.style.transform = 'translateX(-50px)';
+                step.style.opacity = '0';
+                step.style.transition = `transform 0.6s ease ${index * 0.1}s, opacity 0.6s ease ${index * 0.1}s`;
+                observer.observe(step);
+            });
+        });
+    </script>
+</body>
+</html>

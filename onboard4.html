@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Web App Setup - Step 4</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a0033 0%, #2d1b4e 50%, #0f0f23 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #a855f7;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #c4b5fd;
+        }
+
+        .overview {
+            background: rgba(30, 30, 60, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .overview h2 {
+            color: #a855f7;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .overview-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .overview-item {
+            background: rgba(139, 92, 246, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .overview-number {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .step-container {
+            background: rgba(30, 30, 60, 0.6);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .step-title {
+            font-size: 1.8rem;
+            color: #a855f7;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .substep {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .substep-title {
+            font-size: 1.3rem;
+            color: #c4b5fd;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .substep-content {
+            color: #e0e0e0;
+            margin-bottom: 15px;
+        }
+
+        .substep-content ul, .substep-content ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .substep-content li {
+            margin-bottom: 8px;
+            color: #d1d5db;
+        }
+
+        .code-block {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            color: #10b981;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block .language-label {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: rgba(139, 92, 246, 0.8);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 70px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #6366f1;
+        }
+
+        .tip-box {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid #8b5cf6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .tip-box h4 {
+            color: #a855f7;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .warning-box h4 {
+            color: #f87171;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .success-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .success-box h4 {
+            color: #34d399;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .highlight {
+            color: #a855f7;
+            font-weight: 600;
+        }
+
+        .platform-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .platform-icon {
+            background: rgba(139, 92, 246, 0.2);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 10px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            color: #c4b5fd;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .platform-icon.active {
+            border-color: #a855f7;
+            background: rgba(168, 85, 247, 0.2);
+            transform: scale(1.05);
+        }
+
+        .platform-icon:hover {
+            transform: translateY(-2px);
+            border-color: #a855f7;
+        }
+
+        .video-container {
+            background: rgba(30, 30, 60, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .video-container h3 {
+            color: #a855f7;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            margin: 20px 0;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .next-button {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .step-container {
+                padding: 20px;
+            }
+
+            .platform-icons {
+                gap: 10px;
+            }
+
+            .platform-icon {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Firebase Web App Setup</h1>
+            <p>Step 4: Set Up Your Web App and Connect to Firebase</p>
+        </div>
+
+        <div class="overview">
+            <h2>🔹 What You'll Do</h2>
+            <div class="overview-list">
+                <div class="overview-item">
+                    <span class="overview-number">1</span>
+                    <span>Register your <strong>web app</strong> in Firebase</span>
+                </div>
+                <div class="overview-item">
+                    <span class="overview-number">2</span>
+                    <span>Get your <strong>Firebase config</strong></span>
+                </div>
+                <div class="overview-item">
+                    <span class="overview-number">3</span>
+                    <span>Install <strong>Firebase SDK</strong> in your project</span>
+                </div>
+                <div class="overview-item">
+                    <span class="overview-number">4</span>
+                    <span>Initialize Firebase in your <code>index.js</code></span>
+                </div>
+                <div class="overview-item">
+                    <span class="overview-number">5</span>
+                    <span>Test that it's connected</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-container">
+            <h2 class="step-title">
+                <span class="step-number">1</span>
+                Register Your Web App in Firebase
+            </h2>
+            
+            <div class="substep">
+                <div class="substep-title">Navigate to Your Project</div>
+                <div class="substep-content">
+                    <ol>
+                        <li>Go to your <span class="highlight">Firebase Console</span> → open your <span class="highlight">project</span></li>
+                        <li>On the <span class="highlight">Project Overview Dashboard</span>, find the row of <span class="highlight">platform icons</span>:</li>
+                    </ol>
+                </div>
+
+                <div class="platform-icons">
+                    <div class="platform-icon">📱 iOS</div>
+                    <div class="platform-icon">🤖 Android</div>
+                    <div class="platform-icon active">💻 Web</div>
+                    <div class="platform-icon">🎮 Unity</div>
+                    <div class="platform-icon">🖥️ Flutter</div>
+                </div>
+            </div>
+
+            <div class="substep">
+                <div class="substep-title">Start Web App Registration</div>
+                <div class="substep-content">
+                    <ol>
+                        <li>Click the <span class="highlight">&lt;/&gt; (Web)</span> icon → this starts the <span class="highlight">web app registration wizard</span></li>
+                        <li><span class="highlight">Add a nickname</span> for your app. Example: <code>MyFirstWebApp</code></li>
+                        <li><strong>✅ (Optional)</strong> — You can check <span class="highlight">"Also set up Firebase Hosting for this app"</span> if you want to deploy it later (good idea, but not required right now)</li>
+                        <li>Click <span class="highlight">Register app</span></li>
+                    </ol>
+                </div>
+
+                <div class="tip-box">
+                    <h4>💡 Pro Tip:</h4>
+                    <p>Setting up Firebase Hosting now will save you time later if you plan to deploy your app. It's recommended to check this option!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-container">
+            <h2 class="step-title">
+                <span class="step-number">2</span>
+                Get Your Firebase Config
+            </h2>
+            
+            <div class="substep">
+                <div class="substep-title">Copy Your Configuration</div>
+                <div class="substep-content">
+                    <p>Once you register, Firebase gives you a <span class="highlight">code snippet</span> like this:</p>
+                    
+                    <div class="code-block">
+                        <span class="language-label">JavaScript</span>
+                        <button class="copy-btn" onclick="copyToClipboard('config-code')">Copy</button>
+                        <div id="config-code">const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};</div>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>🔒 Important Security Note:</h4>
+                        <p><strong>Copy this configuration</strong> and save it safely. You'll need it in the next steps. Keep your actual API keys secure and never commit them to public repositories!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+            
+
+        <div class="video-container">
+            <h3>📺 Video Demo: Setting Up Firebase Web App</h3>
+            <p>Watch this step-by-step tutorial to see the entire process:</p>
+            <div class="video-wrapper">
+                <iframe 
+                    src="https://www.youtube.com/embed/9kRgVxULbag" 
+                    title="Firebase Web App Setup Tutorial" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="#" class="next-button" id="nextButton">
+                Continue to Next Step →
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Get project ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentProjectId = urlParams.get('projectId');
+        
+        // Set up the next button to redirect with project ID
+        document.getElementById('nextButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (currentProjectId) {
+                window.location.href = `/config.html?projectId=${currentProjectId}`;
+            } else {
+                console.warn('No project ID found in URL parameters');
+                window.location.href = 'onboard5.html';
+            }
+        });
+
+        // Copy to clipboard function
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent || element.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                // Visual feedback
+                const button = element.parentNode.querySelector('.copy-btn');
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#10b981';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#4f46e5';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // Add entrance animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const stepContainers = document.querySelectorAll('.step-container');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            stepContainers.forEach(container => {
+                container.style.opacity = '0';
+                container.style.transform = 'translateY(20px)';
+                container.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(container);
+            });
+
+            // Animate overview items
+            const overviewItems = document.querySelectorAll('.overview-item');
+            overviewItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateX(0)';
+                }, index * 100);
+            });
+        });
+
+        // Add hover effects
+        document.querySelectorAll('.substep').forEach(substep => {
+            substep.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateX(5px)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            
+            substep.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateX(0)';
+            });
+        });
+
+        // Platform icon interactions
+        document.querySelectorAll('.platform-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                document.querySelectorAll('.platform-icon').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
